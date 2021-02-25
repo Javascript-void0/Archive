@@ -1,5 +1,6 @@
 import discord
 import os
+import asyncio
 from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -13,21 +14,44 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock Archives"))
 
 @client.command(aliases=['s'], help='Search Indexes')
-async def search(ctx, index=None, p=None):
+async def search(ctx, index=None):
     if not index:
-        await ctx.send('.search <index1 | index2 | index3>')
+        await ctx.send('.search <i | ii | iii>')
     else:
-        if not p:
-            p = 1
-        if p <= 0:
-            p = 1
         with open(f'index/{index}/test.txt', 'r') as file:
             lines = file.read().splitlines()
-            for s in lines:
-                title, body = s.split(" SPLIT ")
-                embed = discord.Embed(title=f'{index}. Document', description=f'Page {p}')
-                embed.add_field(name=title, value=body)
-                await ctx.send(embed=embed)
+            pages = len(lines)
+            page = 0
+            title, body = lines[page].split(" SPLIT ")
+            embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
+            embed.add_field(name=title, value=body)
+            message = await ctx.send(embed=embed)
+            await message.add_reaction("◀")
+            await message.add_reaction("▶")
+
+            def check(reaction, user):
+                return reaction.message.id == message.id and user == ctx.author
+
+            while True:
+                try:
+                    reaction, user = await client.wait_for('reaction_add', timeout= 60.0, check=check)
+                    if reaction.emoji == '◀' and page > 0:
+                        page -= 1
+                        title, body = lines[page].split(" SPLIT ")
+                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
+                        embed.add_field(name=title, value=body)
+                        await message.edit(embed=embed)
+                        await message.remove_reaction(reaction, user)
+                    if reaction.emoji == '▶' and page < pages -1:
+                        page += 1
+                        title, body = lines[page].split(" SPLIT ")
+                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
+                        embed.add_field(name=title, value=body)
+                        await message.edit(embed=embed)
+                        await message.remove_reaction(reaction, user)
+                except asyncio.TimeoutError:
+                    await message.delete()
+                    break
 
 if __name__ == '__main__':
     client.run(TOKEN)
