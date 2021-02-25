@@ -39,4 +39,4 @@ for filename in os.listdir('./index'):
 '''
 
 if __name__ == '__main__':
-    client.run('ODE0Mjg1NjUyMTE1OTgwMzcw.YDbonA.07McNdLCR1JHGVQN4BpBQolgQlU')
+    client.run('TOKEN')
