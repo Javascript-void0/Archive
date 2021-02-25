@@ -28,4 +28,4 @@ async def search(ctx, index=None):
             await ctx.send(embed=embed)
     
 if __name__ == '__main__':
-    client.run('ODE0Mjg1NjUyMTE1OTgwMzcw.YDbonA.kSPMPXSj2G2WYh5w3rtb62vnVz0')
+    client.run(TOKEN)
