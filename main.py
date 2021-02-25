@@ -21,4 +21,4 @@ async def search(ctx, index=None):
             await ctx.send(file.read().strip())
 
 if __name__ == '__main__':
-    client.run('TOKEN')
+    client.run(TOKEN)
