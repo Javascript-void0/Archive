@@ -8,6 +8,12 @@ intents.members = True
 client = commands.Bot(command_prefix='.', intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
 
+async def update_embed(page, index, message, lines):
+    title, body = lines[page].split(" SPLIT ")
+    embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
+    embed.add_field(name=title, value=body)
+    await message.edit(embed=embed)
+
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
@@ -40,35 +46,25 @@ async def search(ctx, index=None):
                     reaction, user = await client.wait_for('reaction_add', timeout= 60.0, check=check)
                     if reaction.emoji == '⏮':
                         page = 0
-                        title, body = lines[page].split(" SPLIT ")
-                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
-                        embed.add_field(name=title, value=body)
-                        await message.edit(embed=embed)
+                        await update_embed(page, index, message, lines)
                         await message.remove_reaction(reaction, user)
-                    if reaction.emoji == '◀' and page > 0:
+                    elif reaction.emoji == '◀' and page > 0:
                         page -= 1
-                        title, body = lines[page].split(" SPLIT ")
-                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
-                        embed.add_field(name=title, value=body)
-                        await message.edit(embed=embed)
+                        await update_embed(page, index, message, lines)
                         await message.remove_reaction(reaction, user)
-                    if reaction.emoji == '▶' and page < pages -1:
+                    elif reaction.emoji == '▶' and page < pages -1:
                         page += 1
-                        title, body = lines[page].split(" SPLIT ")
-                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
-                        embed.add_field(name=title, value=body)
-                        await message.edit(embed=embed)
+                        await update_embed(page, index, message, lines)
                         await message.remove_reaction(reaction, user)
-                    if reaction.emoji == '⏭':
+                    elif reaction.emoji == '⏭':
                         page = len(lines)-1
-                        title, body = lines[page].split(" SPLIT ")
-                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
-                        embed.add_field(name=title, value=body)
-                        await message.edit(embed=embed)
+                        await update_embed(page, index, message, lines)
                         await message.remove_reaction(reaction, user)
-                    if reaction.emoji == '❌':
+                    elif reaction.emoji == '❌':
                         await message.edit(content='`Timeout`', embed=embed)
                         break
+                    else:
+                        await message.remove_reaction(reaction, user)
                 except asyncio.TimeoutError:
                     await message.edit(content='`Timeout`', embed=embed)
                     break
