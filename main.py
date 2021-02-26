@@ -26,8 +26,11 @@ async def search(ctx, index=None):
             embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
             embed.add_field(name=title, value=body)
             message = await ctx.send(embed=embed)
+            await message.add_reaction("⏮")
             await message.add_reaction("◀")
             await message.add_reaction("▶")
+            await message.add_reaction("⏭")
+            await message.add_reaction("❌")
 
             def check(reaction, user):
                 return reaction.message.id == message.id and user == ctx.author
@@ -35,6 +38,13 @@ async def search(ctx, index=None):
             while True:
                 try:
                     reaction, user = await client.wait_for('reaction_add', timeout= 60.0, check=check)
+                    if reaction.emoji == '⏮':
+                        page = 0
+                        title, body = lines[page].split(" SPLIT ")
+                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
+                        embed.add_field(name=title, value=body)
+                        await message.edit(embed=embed)
+                        await message.remove_reaction(reaction, user)
                     if reaction.emoji == '◀' and page > 0:
                         page -= 1
                         title, body = lines[page].split(" SPLIT ")
@@ -49,8 +59,18 @@ async def search(ctx, index=None):
                         embed.add_field(name=title, value=body)
                         await message.edit(embed=embed)
                         await message.remove_reaction(reaction, user)
+                    if reaction.emoji == '⏭':
+                        page = len(lines)-1
+                        title, body = lines[page].split(" SPLIT ")
+                        embed = discord.Embed(title=f'{index}. Document', description=f'Page {page+1}')
+                        embed.add_field(name=title, value=body)
+                        await message.edit(embed=embed)
+                        await message.remove_reaction(reaction, user)
+                    if reaction.emoji == '❌':
+                        await message.edit(content='`Timeout`', embed=embed)
+                        break
                 except asyncio.TimeoutError:
-                    await message.delete()
+                    await message.edit(content='`Timeout`', embed=embed)
                     break
 
 if __name__ == '__main__':
