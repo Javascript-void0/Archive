@@ -25,57 +25,76 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock Archives"))
 
 @client.command(aliases=['s'], help='Search Directory')
-async def search(ctx, dir=None):
+async def search(ctx, dir=None, option=None):
+    if dir == None:
+        await ctx.send('Usage: `.search <file> <all>`')
+
     edir = dir[2:]
     with open(f'index/{dir}.txt', 'r') as file:
         lines = file.read().splitlines()
         pages = len(lines)
         page = 0
-        try:
-            title, body = lines[page].split(" SPLIT ")
-        except ValueError:
-            title, body, image = lines[page].split(" SPLIT ")
-            embed = discord.Embed(title=f'Document {edir}', description=f'Page {page+1} - [Image]({image})')
+        image = None
+
+        if option == "all":
+            for s in lines:
+                try:
+                    title, body = s.split(" SPLIT ")
+                except ValueError:
+                    title, body, image = s.split(" SPLIT ")
+                    embed = discord.Embed(title=f'Document {edir}', description=f'Page {page+1} - [Image]({image})')
+                else:
+                    embed = discord.Embed(title=f'Document {edir}', description=f'Page {page+1}')
+                embed.add_field(name=title, value=body)
+                page += 1
+                message = await ctx.send(embed=embed)
+
         else:
-            embed = discord.Embed(title=f'Document {edir}', description=f'Page {page+1}')
-        embed.add_field(name=title, value=body)
-        message = await ctx.send(embed=embed)
-        await message.add_reaction("⏮")
-        await message.add_reaction("◀")
-        await message.add_reaction("▶")
-        await message.add_reaction("⏭")
-        await message.add_reaction("❌")
-
-        def check(reaction, user):
-            return reaction.message.id == message.id and user == ctx.author
-
-        while True:
             try:
-                reaction, user = await client.wait_for('reaction_add', timeout= 60.0, check=check)
-                if reaction.emoji == '⏮' and page != 0:
-                    page = 0
-                    await update_embed(page, edir, message, lines, image)
-                    await message.remove_reaction(reaction, user)
-                elif reaction.emoji == '◀' and page > 0:
-                    page -= 1
-                    await update_embed(page, edir, message, lines, image)
-                    await message.remove_reaction(reaction, user)
-                elif reaction.emoji == '▶' and page < pages -1:
-                    page += 1
-                    await update_embed(page, edir, message, lines, image)
-                    await message.remove_reaction(reaction, user)
-                elif reaction.emoji == '⏭' and page != len(lines)-1:
-                    page = len(lines)-1
-                    await update_embed(page, edir, message, lines, image)
-                    await message.remove_reaction(reaction, user)
-                elif reaction.emoji == '❌':
+                title, body = lines[page].split(" SPLIT ")
+            except ValueError:
+                title, body, image = lines[page].split(" SPLIT ")
+                embed = discord.Embed(title=f'Document {edir}', description=f'Page {page+1} - [Image]({image})')
+            else:
+                embed = discord.Embed(title=f'Document {edir}', description=f'Page {page+1}')
+            embed.add_field(name=title, value=body)
+            message = await ctx.send(embed=embed)
+            await message.add_reaction("⏮")
+            await message.add_reaction("◀")
+            await message.add_reaction("▶")
+            await message.add_reaction("⏭")
+            await message.add_reaction("❌")
+
+            def check(reaction, user):
+                return reaction.message.id == message.id and user == ctx.author
+
+            while True:
+                try:
+                    reaction, user = await client.wait_for('reaction_add', timeout= 60.0, check=check)
+                    if reaction.emoji == '⏮' and page != 0:
+                        page = 0
+                        await update_embed(page, edir, message, lines, image)
+                        await message.remove_reaction(reaction, user)
+                    elif reaction.emoji == '◀' and page > 0:
+                        page -= 1
+                        await update_embed(page, edir, message, lines, image)
+                        await message.remove_reaction(reaction, user)
+                    elif reaction.emoji == '▶' and page < pages -1:
+                        page += 1
+                        await update_embed(page, edir, message, lines, image)
+                        await message.remove_reaction(reaction, user)
+                    elif reaction.emoji == '⏭' and page != len(lines)-1:
+                        page = len(lines)-1
+                        await update_embed(page, edir, message, lines, image)
+                        await message.remove_reaction(reaction, user)
+                    elif reaction.emoji == '❌':
+                        await message.edit(content='`Timeout`', embed=embed)
+                        break
+                    else:
+                        await message.remove_reaction(reaction, user)
+                except asyncio.TimeoutError:
                     await message.edit(content='`Timeout`', embed=embed)
                     break
-                else:
-                    await message.remove_reaction(reaction, user)
-            except asyncio.TimeoutError:
-                await message.edit(content='`Timeout`', embed=embed)
-                break
 
 @client.command(aliases=['files, index'], help='List Files in Directory')
 async def list(ctx):
