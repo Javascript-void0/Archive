@@ -27,13 +27,15 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock Archives"))
 
     for file in os.listdir('index'):
+        g = client.get_guild(802565984602423367)
+        c = g.get_channel(814293652234043392)
         global doc_count, cat_count
         doc_count += 1
         ct = []
         ct.append(file[0])
         ct.sort()
         cat_count = int(ct[-1])
-        print(doc_count, cat_count)
+        await c.send(doc_count, cat_count)
 
 @client.command(aliases=['s'], help='Search Directory')
 async def search(ctx, dir=None, option=None):
