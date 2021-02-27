@@ -10,6 +10,14 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 doc_count = 0
 cat_count = 0
 
+for file in os.listdir('index'):
+    global doc_count, cat_count
+    doc_count += 1
+    ct = []
+    ct.append(file[0])
+    ct.sort()
+    cat_count = int(ct[-1])
+
 async def update_embed(page, f, message, lines, image=None):
     try:
         title, body = lines[page].split(" SPLIT ")
@@ -25,17 +33,6 @@ async def update_embed(page, f, message, lines, image=None):
 async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock Archives"))
-
-    for file in os.listdir('index'):
-        g = client.get_guild(802565984602423367)
-        c = g.get_channel(814293652234043392)
-        global doc_count, cat_count
-        doc_count += 1
-        ct = []
-        ct.append(file[0])
-        ct.sort()
-        cat_count = int(ct[-1])
-        await c.send(doc_count, cat_count)
 
 @client.command(aliases=['s'], help='Search Directory')
 async def search(ctx, dir=None, option=None):
