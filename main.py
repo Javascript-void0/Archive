@@ -98,11 +98,21 @@ async def search(ctx, dir=None, option=None):
 
 @client.command(aliases=['files, index'], help='List Files in Directory')
 async def list(ctx):
+    l = {}
+    ct = []
+    em = discord.Embed(title="List of Files in Directory")
     for file in os.listdir('index'):
-        if file.startswith("1_"):
-            await ctx.send(f"**US_History**: {file}")
-        elif file.startswith("2_"):
-            await ctx.send(f"**Testing**: {file}")
+        ct.append(file[0])
+        ct.sort()
+    for i in range(int(ct[-1])):
+        i += 1
+        l[i] = []
+        for file in os.listdir('index'):
+            if file.startswith(f"{i}_"):
+                l[i].append(file)
+        l[i] = "\n".join(l[i])
+        em.add_field(name=f'Category {i}', value=l[i], inline=False)
+    await ctx.send(embed=em)
 
 if __name__ == '__main__':
     client.run(TOKEN)
