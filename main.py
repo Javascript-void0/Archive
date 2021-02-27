@@ -11,7 +11,6 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 cat_count = 0
 
 for file in os.listdir('index'):
-    global cat_count
     doc_count += 1
     ct = []
     ct.append(file[0])
