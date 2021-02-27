@@ -40,8 +40,6 @@ async def search(ctx, dir=None, option=None):
     if dir == None:
         await ctx.send('Usage: `.search <file> <all>`')
 
-    global doc_count
-    await file_count()
     for file in os.listdir('index'):
         f = file[2:]
         if f == dir + ".txt":
