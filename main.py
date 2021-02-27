@@ -34,6 +34,7 @@ async def update_embed(page, f, message, lines, image=None):
 async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock Archives"))
+    await file_count
 
 @client.command(aliases=['s'], help='Search Directory')
 async def search(ctx, dir=None, option=None):
