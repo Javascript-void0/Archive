@@ -7,7 +7,7 @@ intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix='.', intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
-# doc_count = 0
+doc_count = 0
 cat_count = 0
 
 for file in os.listdir('index'):
