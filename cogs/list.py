@@ -13,10 +13,9 @@ class List(commands.Cog):
             ct = []
             ct.append(file[0])
             ct.sort()
-            cat_count = int(ct[-1])
         l = {}
         em = discord.Embed(title="List of Files in Directory")
-        for i in range(cat_count):
+        for i in range(int(ct[-1])):
             i += 1
             l[i] = []
             for file in os.listdir('index'):
