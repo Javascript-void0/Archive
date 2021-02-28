@@ -9,10 +9,10 @@ class List(commands.Cog):
 
     @commands.command(aliases=['i','information','info'], help='Info about the bot', invoke_without_command=True)
     async def help(self, ctx):
-        doc_count = 0
-
-        for doc_count in os.listdir('index'):
-            doc_count += 1
+        c = []
+        for file in os.listdir('index'):
+            c.append(file)
+            doc_count = len(c)
 
         embed = discord.Embed(title='🗑 Archive Bot', description='Random crap coming from a [Github Repository](https://github.com/Javascript-void0/Archive).')
         embed.add_field(name=f'Documents: {doc_count}', value='Made by Java  🍌', inline=True)
