@@ -10,12 +10,12 @@ class List(commands.Cog):
     @commands.command(aliases=['files', 'index'], help='List Files in Directory')
     async def list(self, ctx):
         for file in os.listdir('index'):
-            ct = []
-            ct.append(file[0])
-            ct.sort()
+            count = []
+            count.append(file[0])
+            count.sort()
         l = {}
         em = discord.Embed(title="List of Files in Directory")
-        for i in range(int(ct[-1])):
+        for i in range(int(count[-1])):
             i += 1
             l[i] = []
             for file in os.listdir('index'):
