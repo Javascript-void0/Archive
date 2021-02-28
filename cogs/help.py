@@ -11,7 +11,7 @@ class List(commands.Cog):
     async def help(self, ctx):
         doc_count = 0
 
-        for file in os.listdir('index'):
+        for doc_count in os.listdir('index'):
             doc_count += 1
 
         embed = discord.Embed(title='🗑 Archive Bot', description='Random crap coming from a [Github Repository](https://github.com/Javascript-void0/Archive).')
