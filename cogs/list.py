@@ -1,5 +1,6 @@
 import discord
 import os
+import config
 from discord.ext import commands
 
 class List(commands.Cog):
@@ -9,13 +10,9 @@ class List(commands.Cog):
 
     @commands.command(aliases=['files', 'index'], help='List Files in Directory')
     async def list(self, ctx):
-        for file in os.listdir('index'):
-            count = []
-            count.append(file[0])
-            count.sort()
         l = {}
         em = discord.Embed(title="List of Files in Directory")
-        for i in range(int(count[-1])):
+        for i in range(config.cat_count):
             i += 1
             l[i] = []
             for file in os.listdir('index'):
