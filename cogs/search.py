@@ -3,16 +3,6 @@ import os
 import asyncio
 from discord.ext import commands
 
-doc_count = 0
-cat_count = 0
-
-for file in os.listdir('index'):
-    doc_count += 1
-    ct = []
-    ct.append(file[0])
-    ct.sort()
-    cat_count = int(ct[-1])
-
 async def update_embed(page, f, message, lines, image=None):
     try:
         title, body = lines[page].split(" SPLIT ")

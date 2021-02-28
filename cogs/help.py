@@ -2,16 +2,6 @@ import discord
 import os
 from discord.ext import commands
 
-doc_count = 0
-cat_count = 0
-
-for file in os.listdir('index'):
-    doc_count += 1
-    ct = []
-    ct.append(file[0])
-    ct.sort()
-    cat_count = int(ct[-1])
-
 class List(commands.Cog):
 
     def __init__(self, client):
@@ -19,6 +9,11 @@ class List(commands.Cog):
 
     @commands.command(aliases=['i','information','info'], help='Info about the bot', invoke_without_command=True)
     async def help(self, ctx):
+        doc_count = 0
+
+        for file in os.listdir('index'):
+            doc_count += 1
+
         embed = discord.Embed(title='🗑 Archive Bot', description='Random crap coming from a [Github Repository](https://github.com/Javascript-void0/Archive).')
         embed.add_field(name=f'Documents: {doc_count}', value='Made by Java  🍌', inline=True)
 #        embed.add_field(name='Commands: 3', value='help, search, list', inline=True)

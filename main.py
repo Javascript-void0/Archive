@@ -11,7 +11,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock Archives"))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Archives"))
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
