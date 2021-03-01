@@ -3,7 +3,7 @@ import os
 import config
 from discord.ext import commands
 
-class List(commands.Cog):
+class Help(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -17,4 +17,4 @@ class List(commands.Cog):
         await ctx.send(embed=embed)
 
 def setup(client):
-    client.add_cog(List(client))
+    client.add_cog(Help(client))

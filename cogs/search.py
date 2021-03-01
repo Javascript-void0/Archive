@@ -11,10 +11,11 @@ async def update_embed(page, f, message, lines, image=None):
         embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Image]({image})')
     else:
         embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+    body = f"{body}".encode().decode('unicode-escape')
     embed.add_field(name=title, value=body)
     await message.edit(embed=embed)
 
-class List(commands.Cog):
+class Search(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -22,7 +23,7 @@ class List(commands.Cog):
     @commands.command(aliases=['s','open','o'], help='Search Directory')
     async def search(self, ctx, dir=None, option=None):
         if dir == None:
-            await ctx.send('Usage: `.search <file> <all>`')
+            await ctx.send('Usage: `.search <file> <page>`')
 
         for file in os.listdir('index'):
             f = file[2:]
@@ -33,6 +34,17 @@ class List(commands.Cog):
                     page = 0
                     image = None
 
+                    try: 
+                        if float(option).is_integer():
+                            option = int(option)
+                            try:
+                                if option > 0 and option <= len(lines):
+                                    page = option-1
+                            except IndexError:
+                                page = 0
+                    except TypeError:
+                        pass
+
                     if option == "all":
                         for s in lines:
                             try:
@@ -42,6 +54,7 @@ class List(commands.Cog):
                                 embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Image]({image})')
                             else:
                                 embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                            body = f"{body}".encode().decode('unicode-escape')
                             embed.add_field(name=title, value=body)
                             page += 1
                             message = await ctx.send(embed=embed)
@@ -54,6 +67,7 @@ class List(commands.Cog):
                             embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Image]({image})')
                         else:
                             embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                        body = f"{body}".encode().decode('unicode-escape')
                         embed.add_field(name=title, value=body)
                         message = await ctx.send(embed=embed)
                         await message.add_reaction("⏮")
@@ -94,4 +108,4 @@ class List(commands.Cog):
                                 break
 
 def setup(client):
-    client.add_cog(List(client))
+    client.add_cog(Search(client))
