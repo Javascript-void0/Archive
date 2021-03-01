@@ -8,7 +8,7 @@ class Help(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=['i','information','info'], help='Info about the bot', invoke_without_command=True)
+    @commands.command(aliases=['i','information','info'], help='Info about the bot')
     async def help(self, ctx):
         embed = discord.Embed(title='🗑 Archive Bot', description='Random crap coming from a [Github Repository](https://github.com/Javascript-void0/Archive).')
         embed.add_field(name=f'Documents: {config.doc_count}', value='Made by Java  🍌', inline=True)

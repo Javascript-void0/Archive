@@ -35,13 +35,16 @@ class Search(commands.Cog):
                     image = None
 
                     try: 
-                        if float(option).is_integer():
-                            option = int(option)
-                            try:
-                                if option > 0 and option <= len(lines):
-                                    page = option-1
-                            except IndexError:
-                                page = 0
+                        try:
+                            if float(option).is_integer():
+                                option = int(option)
+                                try:
+                                    if option > 0 and option <= len(lines):
+                                        page = option-1
+                                except IndexError:
+                                    page = 0
+                        except TypeError:
+                            pass
                     except ValueError:
                         pass
 
