@@ -42,7 +42,7 @@ class Search(commands.Cog):
                                     page = option-1
                             except IndexError:
                                 page = 0
-                    except TypeError:
+                    except ValueError:
                         pass
 
                     if option == "all":
