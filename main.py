@@ -25,7 +25,19 @@ async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Archives"))
 
-        
+@client.command(help='Reloads Cog')
+@commands.is_owner()
+async def reload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+    client.load_extension(f'cogs.{extension}')
+    await ctx.send(f'Reloaded {extension}.py')
+
+@client.command(help='Heroku Testing')
+@commands.is_owner()
+async def test(ctx):
+    await ctx.send(f'Cat_count: {cat_count}')
+    await ctx.send(f'Doc_count: {doc_count}')
+
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
