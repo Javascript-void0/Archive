@@ -8,7 +8,7 @@ async def update_embed(page, f, message, lines, link=None):
         title, body = lines[page].split(" SPLIT ")
     except ValueError:
         title, body, link = lines[page].split(" SPLIT ")
-        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [link]({link})')
+        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
     else:
         embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
     body = f"{body}".encode().decode('unicode-escape')
@@ -54,7 +54,7 @@ class Search(commands.Cog):
                                 title, body = s.split(" SPLIT ")
                             except ValueError:
                                 title, body, link = s.split(" SPLIT ")
-                                embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [link]({link})')
+                                embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
                             else:
                                 embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
                             body = f"{body}".encode().decode('unicode-escape')
@@ -67,7 +67,7 @@ class Search(commands.Cog):
                             title, body = lines[page].split(" SPLIT ")
                         except ValueError:
                             title, body, link = lines[page].split(" SPLIT ")
-                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [link]({link})')
+                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
                         else:
                             embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
                         body = f"{body}".encode().decode('unicode-escape')
