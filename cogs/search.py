@@ -3,12 +3,12 @@ import os
 import asyncio
 from discord.ext import commands
 
-async def update_embed(page, f, message, lines, image=None):
+async def update_embed(page, f, message, lines, link=None):
     try:
         title, body = lines[page].split(" SPLIT ")
     except ValueError:
-        title, body, image = lines[page].split(" SPLIT ")
-        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Image]({image})')
+        title, body, link = lines[page].split(" SPLIT ")
+        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [link]({link})')
     else:
         embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
     body = f"{body}".encode().decode('unicode-escape')
@@ -32,7 +32,7 @@ class Search(commands.Cog):
                     lines = file.read().splitlines()
                     pages = len(lines)
                     page = 0
-                    image = None
+                    link = None
 
                     try: 
                         try:
@@ -53,8 +53,8 @@ class Search(commands.Cog):
                             try:
                                 title, body = s.split(" SPLIT ")
                             except ValueError:
-                                title, body, image = s.split(" SPLIT ")
-                                embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Image]({image})')
+                                title, body, link = s.split(" SPLIT ")
+                                embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [link]({link})')
                             else:
                                 embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
                             body = f"{body}".encode().decode('unicode-escape')
@@ -66,8 +66,8 @@ class Search(commands.Cog):
                         try:
                             title, body = lines[page].split(" SPLIT ")
                         except ValueError:
-                            title, body, image = lines[page].split(" SPLIT ")
-                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Image]({image})')
+                            title, body, link = lines[page].split(" SPLIT ")
+                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [link]({link})')
                         else:
                             embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
                         body = f"{body}".encode().decode('unicode-escape')
@@ -87,19 +87,19 @@ class Search(commands.Cog):
                                 reaction, user = await self.client.wait_for('reaction_add', timeout= 60.0, check=check)
                                 if reaction.emoji == '⏮' and page != 0:
                                     page = 0
-                                    await update_embed(page, f, message, lines, image)
+                                    await update_embed(page, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '◀' and page > 0:
                                     page -= 1
-                                    await update_embed(page, f, message, lines, image)
+                                    await update_embed(page, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '▶' and page < pages -1:
                                     page += 1
-                                    await update_embed(page, f, message, lines, image)
+                                    await update_embed(page, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '⏭' and page != len(lines)-1:
                                     page = len(lines)-1
-                                    await update_embed(page, f, message, lines, image)
+                                    await update_embed(page, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '❌':
                                     await message.edit(content='`Timeout`', embed=embed)
