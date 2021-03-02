@@ -8,18 +8,6 @@ client = commands.Bot(command_prefix='.', intents=intents)
 client.remove_command('help')
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-doc_count = 0
-cat_count = 0
-
-for file in os.listdir('index'):
-    gr = file[0]
-    if gr < file[0]:
-        gr = file[0]
-cat_count = int(gr)
-
-for file in os.listdir('index'):
-    doc_count += 1
-
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))

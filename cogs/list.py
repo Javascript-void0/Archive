@@ -1,6 +1,6 @@
 import discord
 import os
-import main
+from config import cat_count
 from discord.ext import commands
 
 class List(commands.Cog):
@@ -12,7 +12,7 @@ class List(commands.Cog):
     async def list(self, ctx):
         l = {}
         em = discord.Embed(title="List of Files in Directory")
-        for i in range(main.cat_count):
+        for i in range(cat_count):
             i += 1
             l[i] = []
             for file in os.listdir('index'):
