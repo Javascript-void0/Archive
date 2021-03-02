@@ -44,3 +44,5 @@ for filename in os.listdir('./cogs'):
 
 if __name__ == '__main__':
     client.run(TOKEN)
+    client.unload_extension('cogs.list')
+    client.load_extension('cogs.list')
