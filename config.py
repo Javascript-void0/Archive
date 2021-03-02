@@ -1,4 +1,4 @@
-# import os
+import os
 
 ''' Inconsistent on Heroku >:|
 for file in os.listdir('index'):
