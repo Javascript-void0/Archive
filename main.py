@@ -11,16 +11,18 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 doc_count = 0
 cat_count = 0
 
+for file in os.listdir('index'):
+    ct = []
+    ct.append(file[0])
+    ct.sort()
+    cat_count = (int(ct[-1]))
+    doc_count += 1
+
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Archives"))
-    for file in os.listdir('index'):
-        ct = []
-        ct.append(file[0])
-        ct.sort()
-        cat_count = (int(ct[-1]))
-        doc_count += 1
+
         
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
