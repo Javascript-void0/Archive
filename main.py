@@ -12,10 +12,10 @@ doc_count = 0
 cat_count = 0
 
 for file in os.listdir('index'):
-    ct = []
-    ct.append(file[0])
-    ct.sort()
-    cat_count = (int(ct[-1]))
+    gr = file[0]
+    if gr < file[0]:
+        gr = file[0]
+cat_count = int(gr)
 
 for file in os.listdir('index'):
     doc_count += 1
