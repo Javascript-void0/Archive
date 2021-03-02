@@ -16,9 +16,9 @@ for file in os.listdir('index'):
     ct.append(file[0])
     ct.sort()
     cat_count = (int(ct[-1]))
+
+for file in os.listdir('index'):
     doc_count += 1
-    print(cat_count)
-    print(doc_count)
 
 @client.event
 async def on_ready():
