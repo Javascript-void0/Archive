@@ -1,0 +1,3 @@
+This is the title of the page SPLIT Make sure the embeds don't exceed 2048 characters. 
+Each new line genertates as a new page. SPLIT The second split of the line generates a link. SPLIT https://google.com
+Continue Generating lines/pages SPLIT Only the Title and Body splits are required. 

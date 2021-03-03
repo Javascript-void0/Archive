@@ -23,7 +23,7 @@ class Search(commands.Cog):
     @commands.command(aliases=['s','open','o'], help='Search Directory')
     async def search(self, ctx, dir=None, option=None):
         if dir == None:
-            await ctx.send('Usage: `.search <file> <page>`')
+            await ctx.send('Usage: `.search <file> [page]`', delete_after=5)
 
         for file in os.listdir('index'):
             f = file[2:]

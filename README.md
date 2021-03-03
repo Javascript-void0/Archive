@@ -6,14 +6,14 @@ Random Crap coming from a Github Repository.
 
 ## Commands
 
-#### `.help` - Info about the bot
+#### `.help [commands|cmds]` - Info about the bot
 
 ###### aliases - i, info, information
 
-#### `.list` - List of Files in Directory
+#### `.list [category]` - List of Files in Directory
 
 ###### aliases - files, index
 
-#### `.search <file> [page]` - Search Directory
+#### `.search <file> [page|all]` - Search Directory
 
 ###### aliases - s, open, o
