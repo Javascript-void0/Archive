@@ -11,7 +11,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Archives"))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the Archives | .help"))
 
 @client.command(help='Reloads Cogs')
 @commands.is_owner()

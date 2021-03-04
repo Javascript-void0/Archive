@@ -10,18 +10,22 @@ class List(commands.Cog):
 
     @commands.command(aliases=['files', 'index'], help='List Files in Directory')
     async def list(self, ctx, cat=None):
-        cat = int(cat)
-        if cat <= cat_count and cat > 0:
-            lcat = []
-            for file in os.listdir('index'):
-                if file.startswith(f"{cat}_"):
-                    f = file[2:]
-                    lcat.append(f)
-            lcat = "\n".join(lcat)
-            embed = discord.Embed(title=f"Files in Category {cat}")
-            embed.add_field(name=f'Category {cat}', value=lcat)
-            await ctx.send(embed=embed)
-        else:
+        try:
+            cat = int(cat)
+        except TypeError:
+            pass
+        try:
+            if cat <= cat_count and cat > 0:
+                lcat = []
+                for file in os.listdir('index'):
+                    if file.startswith(f"{cat}_"):
+                        f = file[2:]
+                        lcat.append(f)
+                lcat = "\n".join(lcat)
+                embed = discord.Embed(title=f"Files in Category {cat}")
+                embed.add_field(name=f'Category {cat}', value=lcat)
+                await ctx.send(embed=embed)
+        except TypeError:
             l = {}
             em = discord.Embed(title="List of Files in Directory")
             for i in range(cat_count):
