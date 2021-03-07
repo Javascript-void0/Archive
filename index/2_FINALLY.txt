@@ -1,2 +1,0 @@
-Finally worked out .list command SPLIT yay ;)
-This bot kinda dumb tho SPLIT but whatever
