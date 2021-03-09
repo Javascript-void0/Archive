@@ -17,3 +17,7 @@ Random Crap coming from a Github Repository.
 #### `.search <file> [page|all]` - Search Directory
 
 ###### aliases - s, open, o
+
+#### `.testfile` - Tests Format of Attached File
+
+###### usage - Attach `.txt` file with command
