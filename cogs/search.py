@@ -60,7 +60,7 @@ class Search(commands.Cog):
                             body = f"{body}".encode().decode('unicode-escape')
                             embed.add_field(name=title, value=body)
                             page += 1
-                            message = await ctx.send(embed=embed)
+                            await ctx.send(embed=embed)
 
                     else:
                         try:

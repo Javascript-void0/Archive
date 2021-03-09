@@ -15,6 +15,7 @@ class Help(commands.Cog):
             embed.add_field(name="▪.help - Info about the bot", value="aliases - help, i, info, information\nusage - .help [commands|cmds]", inline=False)
             embed.add_field(name="▪.list - List of Files in Directory", value="aliases - list, files, index\nusage - .list [category]", inline=False)
             embed.add_field(name="▪.search - Search Directory", value="aliases - search, s, open, o\nusage - .search <file> [page|all]", inline=False)
+            embed.add_field(name="▪.testfile - Tests Format of Attached File", value="aliases - tf\nusage - .testfile `attach .txt file`", inline=False)
             await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title='🗑 Archive Bot', description='Random crap coming from a [Github Repository](https://github.com/Javascript-void0/Archive).')
