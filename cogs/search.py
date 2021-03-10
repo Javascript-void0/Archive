@@ -23,7 +23,7 @@ class Search(commands.Cog):
     @commands.command(aliases=['s','open','o'], help='Search Directory')
     async def search(self, ctx, dir=None, option=None):
         if dir == None:
-            await ctx.send('Usage: `.search <file> [page]`', delete_after=5)
+            await ctx.send('`[x] Usage: .search <file> [page|all]`')
 
         for file in os.listdir('index'):
             f = file[2:]
@@ -49,18 +49,21 @@ class Search(commands.Cog):
                         pass
 
                     if option == "all":
-                        for s in lines:
-                            try:
-                                title, body = s.split(" SPLIT ")
-                            except ValueError:
-                                title, body, link = s.split(" SPLIT ")
-                                embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
-                            else:
-                                embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
-                            body = f"{body}".encode().decode('unicode-escape')
-                            embed.add_field(name=title, value=body)
-                            page += 1
-                            await ctx.send(embed=embed)
+                        if isinstance(ctx.channel, discord.channel.DMChannel) == True:
+                            for s in lines:
+                                try:
+                                    title, body = s.split(" SPLIT ")
+                                except ValueError:
+                                    title, body, link = s.split(" SPLIT ")
+                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
+                                else:
+                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                                body = f"{body}".encode().decode('unicode-escape')
+                                embed.add_field(name=title, value=body)
+                                page += 1
+                                await ctx.send(embed=embed)
+                        else:
+                            await ctx.send('`[x] Sending all pages can only be used in DMs`')
 
                     else:
                         try:
@@ -102,12 +105,12 @@ class Search(commands.Cog):
                                     await update_embed(page, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '❌':
-                                    await message.edit(content='`Timeout`', embed=embed)
+                                    await message.edit(content='`[x] Timeout`', embed=embed)
                                     break
                                 else:
                                     await message.remove_reaction(reaction, user)
                             except asyncio.TimeoutError:
-                                await message.edit(content='`Timeout`', embed=embed)
+                                await message.edit(content='`[x] Timeout`', embed=embed)
                                 break
 
 def setup(client):
