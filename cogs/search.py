@@ -3,7 +3,7 @@ import os
 import asyncio
 from discord.ext import commands
 
-async def update_embed(page, f, message, lines, link=None):
+async def update_embed(page, pages, f, message, lines, link=None):
     try:
         title, body = lines[page].split(" SPLIT ")
     except ValueError:
@@ -13,7 +13,9 @@ async def update_embed(page, f, message, lines, link=None):
         embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
     body = f"{body}".encode().decode('unicode-escape')
     embed.add_field(name=title, value=body)
+    embed.set_footer(text=f'Page {page+1} of {pages}')
     await message.edit(embed=embed)
+
 
 class Search(commands.Cog):
 
@@ -60,6 +62,7 @@ class Search(commands.Cog):
                                     embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
                                 body = f"{body}".encode().decode('unicode-escape')
                                 embed.add_field(name=title, value=body)
+                                embed.set_footer(text=f'Page {page+1} of {pages}')
                                 page += 1
                                 await ctx.send(embed=embed)
                         else:
@@ -75,6 +78,7 @@ class Search(commands.Cog):
                             embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
                         body = f"{body}".encode().decode('unicode-escape')
                         embed.add_field(name=title, value=body)
+                        embed.set_footer(text=f'Page {page+1} of {pages}')
                         message = await ctx.send(embed=embed)
                         await message.add_reaction("⏮")
                         await message.add_reaction("◀")
@@ -90,19 +94,19 @@ class Search(commands.Cog):
                                 reaction, user = await self.client.wait_for('reaction_add', timeout= 60.0, check=check)
                                 if reaction.emoji == '⏮' and page != 0:
                                     page = 0
-                                    await update_embed(page, f, message, lines, link)
+                                    await update_embed(page, pages, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '◀' and page > 0:
                                     page -= 1
-                                    await update_embed(page, f, message, lines, link)
+                                    await update_embed(page, pages, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '▶' and page < pages -1:
                                     page += 1
-                                    await update_embed(page, f, message, lines, link)
+                                    await update_embed(page, pages, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '⏭' and page != len(lines)-1:
                                     page = len(lines)-1
-                                    await update_embed(page, f, message, lines, link)
+                                    await update_embed(page, pages, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
                                 elif reaction.emoji == '❌':
                                     await message.edit(content='`[x] Timeout`', embed=embed)

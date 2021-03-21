@@ -1,6 +1,6 @@
 import discord
 import os
-from config import cat_count
+from main import cat_count
 from discord.ext import commands
 
 class List(commands.Cog):

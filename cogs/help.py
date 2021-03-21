@@ -1,6 +1,6 @@
 import discord
 import os
-from config import doc_count
+from main import doc_count
 from discord.ext import commands
 
 class Help(commands.Cog):

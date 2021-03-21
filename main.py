@@ -8,6 +8,9 @@ client = commands.Bot(command_prefix='.', intents=intents)
 client.remove_command('help')
 TOKEN = os.getenv("DISCORD_TOKEN")
 
+cat_count = 3
+doc_count = 0
+
 @client.event
 async def on_ready():
     print('[+] Started {0.user}'.format(client))
@@ -21,6 +24,9 @@ async def reload(ctx):
             client.unload_extension(f'cogs.{filename[:-3]}')
             client.load_extension(f'cogs.{filename[:-3]}')
     await ctx.send(f'`[+] Reloaded Cogs`')
+
+for file in os.listdir('./index'):
+    doc_count += 1  
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
