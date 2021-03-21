@@ -27,7 +27,7 @@ class Search(commands.Cog):
         if dir == None:
             await ctx.send('`[x] Usage: .search <file> [page|all]`')
 
-        for file in os.listdir('index'):
+        for file in os.listdir('./index'):
             f = file[2:]
             if f == dir + ".txt":
                 with open(f'index/{file}', 'r') as file:
@@ -35,7 +35,7 @@ class Search(commands.Cog):
                     pages = len(lines)
                     page = 0
                     link = None
-                    url = f'https://github.com/Javascript-void0/Archive/blob/main/index/{f}'
+                    url = f'https://github.com/Javascript-void0/Archive/blob/main/{file.name}'
 
                     try: 
                         try:
