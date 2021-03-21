@@ -21,6 +21,8 @@ class TestFile(commands.Cog):
                         pages = len(lines)
                         page = 0
                         link = None
+                        url = f'https://github.com/Javascript-void0/Archive/blob/main/index/{attachment.filename}'
+                        f = attachment.filename[2:]
 
                     for s in lines:
                         try:
@@ -36,16 +38,17 @@ class TestFile(commands.Cog):
                                         await ctx.send(f'{attachment.filename} has too many SPLITs')
                                         os.remove(attachment.filename)
                                 else:
-                                    embed = discord.Embed(title=f'Document {attachment.filename}', description=f'Page {page+1} - [Link]({link})')
+                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
 
                             elif 'not enough' in str(e):
                                 await ctx.send(f'{attachment.filename} is missing title/body')
                                 os.remove(attachment.filename)
                         else:
-                            embed = discord.Embed(title=f'Document {attachment.filename}', description=f'Page {page+1}')
+                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
 
                         body = f"{body}".encode().decode('unicode-escape')
-                        embed.add_field(name=title, value=body)
+                        embed.add_field(name=title, value=f'{body}\n\n[Document in Github]({url})')
+                        embed.set_footer(text=f'Page {page+1} of {pages}')
                         page += 1
                         await ctx.send(embed=embed)
 
