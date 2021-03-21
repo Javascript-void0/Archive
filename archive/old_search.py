@@ -3,15 +3,19 @@ import os
 import asyncio
 from discord.ext import commands
 
-async def update_embed(listpages, page, url, f, message):
-    newpage = listpages[page]
-    if newpage[2] == "None":
-        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+async def update_embed(page, pages, url, f, message, lines, link=None):
+    try:
+        title, body = lines[page].split(" SPLIT ")
+    except ValueError:
+        title, body, link = lines[page].split(" SPLIT ")
+        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
     else:
-        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({newpage[2]})')
-    embed.add_field(name=newpage[0], value=f'{newpage[1]}\n\n[Document in Github]({url})')
-    embed.set_footer(text=f'Page {listpages.index(newpage)+1} of {len(listpages)}')
+        embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+    body = f"{body}".encode().decode('unicode-escape')
+    embed.add_field(name=title, value=f'{body}\n\n[Document in Github]({url})')
+    embed.set_footer(text=f'Page {page+1} of {pages}')
     await message.edit(embed=embed)
+
 
 class Search(commands.Cog):
 
@@ -28,6 +32,7 @@ class Search(commands.Cog):
             if f == dir + ".txt":
                 with open(f'index/{file}', 'r') as file:
                     lines = file.read().splitlines()
+                    pages = len(lines)
                     page = 0
                     link = None
                     url = f'https://github.com/Javascript-void0/Archive/blob/main/{file.name}'
@@ -45,55 +50,37 @@ class Search(commands.Cog):
                             pass
                     except ValueError:
                         pass
-                    
-                    titles = []
-                    texts = []
-                    links = []
-                    for i in range(len(lines)):
-                        if lines[i].startswith(' TITLE '):
-                            x = lines[i].replace(' TITLE ', "", 1)
-                            titles.append(x)
-                        elif lines[i].startswith(' LINK '):
-                            x = lines[i].replace(' LINK ', "", 1)
-                            links.append(x)
-                        else:
-                            texts.append(lines[i])
-                            t = "\n".join(texts)
-                            t = t.split("\n\n")
-
-                    listpages = []
-                    for i in range(len(titles)):
-                        newpage = []
-                        newpage.append(titles[i])
-                        newpage.append(t[i])
-                        newpage.append(links[i])
-                        listpages.append(newpage)
 
                     if option == "all":
                         if isinstance(ctx.channel, discord.channel.DMChannel) == True:
-                            for s in listpages:
-                                newpage = listpages[page]
-                                if newpage[2] == "None":
-                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                            for s in lines:
+                                try:
+                                    title, body = s.split(" SPLIT ")
+                                except ValueError:
+                                    title, body, link = s.split(" SPLIT ")
+                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
                                 else:
-                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({newpage[2]})')
-                                embed.add_field(name=newpage[0], value=f'{newpage[1]}\n\n[Document in Github]({url})')
-                                embed.set_footer(text=f'Page {listpages.index(newpage)+1} of {len(listpages)}')
-                                message = await ctx.send(embed=embed)
+                                    embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                                body = f"{body}".encode().decode('unicode-escape')
+                                embed.add_field(name=title, value=f'{body}\n\n[Document in Github]({url})')
+                                embed.set_footer(text=f'Page {page+1} of {pages}')
                                 page += 1
+                                await ctx.send(embed=embed)
                         else:
                             await ctx.send('`[x] Sending all pages can only be used in DMs`')
 
                     else:
-                        newpage = listpages[page]
-                        if newpage[2] == "None":
-                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                        try:
+                            title, body = lines[page].split(" SPLIT ")
+                        except ValueError:
+                            title, body, link = lines[page].split(" SPLIT ")
+                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({link})')
                         else:
-                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1} - [Link]({newpage[2]})')
-                        embed.add_field(name=newpage[0], value=f'{newpage[1]}\n\n[Document in Github]({url})')
-                        embed.set_footer(text=f'Page {listpages.index(newpage)+1} of {len(listpages)}')
+                            embed = discord.Embed(title=f'Document {f}', description=f'Page {page+1}')
+                        body = f"{body}".encode().decode('unicode-escape')
+                        embed.add_field(name=title, value=f'{body}\n\n[Document in Github]({url})')
+                        embed.set_footer(text=f'Page {page+1} of {pages}')
                         message = await ctx.send(embed=embed)
-                        
                         await message.add_reaction("⏮")
                         await message.add_reaction("◀")
                         await message.add_reaction("▶")
@@ -108,23 +95,22 @@ class Search(commands.Cog):
                                 reaction, user = await self.client.wait_for('reaction_add', timeout= 60.0, check=check)
                                 if reaction.emoji == '⏮' and page != 0:
                                     page = 0
+                                    await update_embed(page, pages, url, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
-                                    await update_embed(listpages, page, url, f, message)
                                 elif reaction.emoji == '◀' and page > 0:
                                     page -= 1
+                                    await update_embed(page, pages, url, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
-                                    await update_embed(listpages, page, url, f, message)
-                                elif reaction.emoji == '▶' and page < len(listpages) -1:
+                                elif reaction.emoji == '▶' and page < pages -1:
                                     page += 1
+                                    await update_embed(page, pages, url, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
-                                    await update_embed(listpages, page, url, f, message)
-                                elif reaction.emoji == '⏭' and page != len(listpages)-1:
-                                    page = len(listpages)-1
+                                elif reaction.emoji == '⏭' and page != len(lines)-1:
+                                    page = len(lines)-1
+                                    await update_embed(page, pages, url, f, message, lines, link)
                                     await message.remove_reaction(reaction, user)
-                                    await update_embed(listpages, page, url, f, message)
                                 elif reaction.emoji == '❌':
                                     await message.edit(content='`[x] Timeout`', embed=embed)
-                                    await message.remove_reaction(reaction, user)
                                     break
                                 else:
                                     await message.remove_reaction(reaction, user)

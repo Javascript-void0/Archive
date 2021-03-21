@@ -1,1 +1,10 @@
-🗑 Archive Bot - Made by Java ジャワ#7233 SPLIT Random Crap coming from a Github Repository.\n\n**Commands** `.help [commands|cmds]` - Info about the bot\naliases - i, info, information\n`.list [category]` - List of Files in Directory\naliases - files, index\n`.search <file> [page|all]` - Search Directory\naliases - s, open, o\n`.testfile` - Tests Format of Attached File\nusage - Attach `.txt` file with command
+ TITLE 🗑 Archive Bot - Made by Java ジャワ#7233 SPLIT Random Crap coming from a Github Repository.
+**Commands** `.help [commands|cmds]` - Info about the bot
+aliases - i, info, information
+`.list [category]` - List of Files in Directory
+aliases - files, index
+`.search <file> [page|all]` - Search Directory
+aliases - s, open, o
+`.testfile` - Tests Format of Attached File
+usage - Attach `.txt` file with command
+ LINK None
