@@ -4,9 +4,9 @@ from discord.ext import commands
 
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(command_prefix='.', intents=intents)
+client = commands.Bot(command_prefix='::', intents=intents)
 client.remove_command('help')
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 cat_count = 3
 doc_count = 0
@@ -27,6 +27,18 @@ async def reload(ctx):
 
 for file in os.listdir('./index'):
     doc_count += 1  
+
+@client.command(help='Load Cogs')
+@commands.is_owner()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+    await ctx.send(f'Loaded {extension}')
+
+@client.command(help='Unload Cogs')
+@commands.is_owner()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+    await ctx.send(f'Unloaded {extension}')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
